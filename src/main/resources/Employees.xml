@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<company>
+    <worker>
+        <name>Naman</name>
+        <lastname>Kumar</lastname>
+        <birthdate>01.01.1982</birthdate>
+        <hire_date>01.01.2022</hire_date>
+    </worker>
+
+    <worker>
+        <name>Vasiliy</name>
+        <lastname>Petrov</lastname>
+        <birthdate>01.01.1983</birthdate>
+        <hire_date>01.01.2021</hire_date>
+    </worker>
+
+    <manager>
+        <name>Kapil</name>
+        <lastname>Kumar</lastname>
+        <birthdate>02.02.1983</birthdate>
+        <hire_date>02.02.2020</hire_date>
+        <workers>
+                <name>Naman</name>
+                <lastname>Kumar</lastname>
+                <birthdate>01.01.1982</birthdate>
+                <hire_date>01.01.2022</hire_date>
+        </workers>
+    </manager>
+
+    <other>
+        <name>Steven</name>
+        <lastname>Spielberg</lastname>
+        <birthdate>01.01.1967</birthdate>
+        <hire_date>03.03.2021</hire_date>
+        <description>Director</description>
+    </other>
+</company>
