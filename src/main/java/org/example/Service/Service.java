@@ -72,30 +72,9 @@ public class Service {
         return workers;
 }
 
-
     public LocalDate parseDate(String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return LocalDate.parse(date, formatter);
     }
 }
 
-
-
-
-
-//    String workers = null;
-//    String description = null;
-//                if (category.equals("manager")) {
-//        workers = element.getElementsByTagName("workers").item(0).getTextContent();
-//    }
-//                if (category.equals("other")) {
-//        description = element.getElementsByTagName("description").item(0).getTextContent();
-//    }
-
-
-//                if (category.equals("manager")) {
-//        System.out.println("workers : " + workers);
-//    }
-//                if ((category.equals("other"))) {
-//        System.out.println("description : " + description);
-//    }
