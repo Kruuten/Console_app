@@ -53,7 +53,6 @@ public class Service {
             throw new RuntimeException(e);
         }
     }
-
     public List<Worker> initWorkers(NodeList nodeList){
         List<Worker> workers = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
