@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 public class App {
     public static void main(String[] args) throws IOException, InterruptedException {
         Service service = new Service();
-        service.readFile();
         System.out.println("Hi, what do you want to do?");
         boolean loop = true;
         do {
@@ -21,7 +20,7 @@ public class App {
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    service.showList("worker");
+                    service.showList("workers");
                     Thread.sleep(2000);
                     break;
                 case 3:
@@ -29,7 +28,7 @@ public class App {
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    service.showList("other");
+                    service.showList("others");
                     Thread.sleep(2000);
                     break;
                 case 11:
