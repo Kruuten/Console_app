@@ -46,4 +46,14 @@ public class Worker {
         this.birthday = birthday;
         this.hireDate = hire_date;
     }
+
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", hireDate=" + hireDate +
+                '}';
+    }
 }
