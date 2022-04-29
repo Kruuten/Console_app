@@ -16,6 +16,15 @@ import java.util.List;
 public class Service {
     private Document document;
     private static final String FILE = "src/main/resources/Employees.xml";
+    private String name;
+    private String lastName;
+    private LocalDate birthday;
+    private LocalDate hireDate;
+    private String description;
+    private List<Worker> workers;
+    private List<Manager> managers;
+    private List<Worker> subordinate;
+    private List<Other> others;
 
     public void showList(String category) {
         try {
@@ -24,14 +33,11 @@ public class Service {
             throw new RuntimeException(e);
         }
         Node rootNode = document.getFirstChild();
-
         NodeList rootChildren = rootNode.getChildNodes();
-        Node workersNode = null;
-        Node managersNode = null;
-        Node othersNode = null;
-        List<Worker> workers = new ArrayList<>();
-        List<Manager> managers = new ArrayList<>();
-        List<Other> others = new ArrayList<>();
+
+        Node workersNode;
+        Node managersNode;
+        Node othersNode;
 
         for (int i = 0; i < rootChildren.getLength(); i++) {
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
@@ -42,7 +48,7 @@ public class Service {
                 case "workers":
                     if (category.equals("workers")) {
                         workersNode = rootChildren.item(i);
-                         workers = workersList(workersNode);
+                        workers = workersList(workersNode);
                     }
                     break;
                 case "managers":
@@ -110,10 +116,6 @@ public class Service {
                 continue;
             }
 
-            String name = null;
-            String surname = null;
-            LocalDate birthday = null;
-            LocalDate hireDate = null;
             NodeList workerElement = workersChilds.item(i).getChildNodes();
             for (int j = 0; j < workerElement.getLength(); j++) {
 
@@ -126,7 +128,7 @@ public class Service {
                         name = workerElement.item(j).getTextContent();
                         break;
                     case "lastname" :
-                        surname = workerElement.item(j).getTextContent();
+                        lastName = workerElement.item(j).getTextContent();
                         break;
                     case "birthdate" :
                         birthday = parseDate(workerElement.item(j).getTextContent());
@@ -136,7 +138,7 @@ public class Service {
                         break;
                 }
             }
-            Worker worker = new Worker(name, surname, birthday, hireDate);
+            Worker worker = new Worker(name, lastName, birthday, hireDate);
             workersList.add(worker);
         }
         return workersList;
@@ -148,7 +150,7 @@ public class Service {
             return null;
         }
         NodeList managersChild = node.getChildNodes();
-        List<Worker> subordinate = new ArrayList<>();
+
         for (int i = 0; i < managersChild.getLength(); i++) {
             if (managersChild.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
@@ -157,10 +159,6 @@ public class Service {
                 continue;
             }
 
-            String name = null;
-            String surname = null;
-            LocalDate birthday = null;
-            LocalDate hireDate = null;
             Node managerWorkers;
             NodeList managersElement = managersChild.item(i).getChildNodes();
             for (int j = 0; j < managersElement.getLength(); j++) {
@@ -174,7 +172,7 @@ public class Service {
                         name = managersElement.item(j).getTextContent();
                         break;
                     case "lastname" :
-                        surname = managersElement.item(j).getTextContent();
+                        lastName = managersElement.item(j).getTextContent();
                         break;
                     case "birthdate" :
                         birthday = parseDate(managersElement.item(j).getTextContent());
@@ -187,7 +185,7 @@ public class Service {
                         subordinate = workersList(managerWorkers);
                 }
             }
-            Manager manager = new Manager(name, surname, birthday, hireDate, subordinate);
+            Manager manager = new Manager(name, lastName, birthday, hireDate, subordinate);
             managersList.add(manager);
         }
         return managersList;
@@ -207,11 +205,6 @@ public class Service {
                 continue;
             }
 
-            String name = null;
-            String lastName = null;
-            LocalDate birthday = null;
-            LocalDate hireDate = null;
-            String description = null;
             NodeList othersElement = othersChild.item(i).getChildNodes();
             for (int j = 0; j < othersElement.getLength(); j++) {
 
@@ -246,9 +239,16 @@ public class Service {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         return documentBuilderFactory.newDocumentBuilder().parse(FILE);
     }
-    public LocalDate parseDate(String date){
+    private LocalDate parseDate(String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return LocalDate.parse(date, formatter);
+    }
+
+    private void printEmployyes(List<?> list){
+        for (Object employee : list){
+            System.out.println( employee.getClass().getName());
+        }
+
     }
 }
 
