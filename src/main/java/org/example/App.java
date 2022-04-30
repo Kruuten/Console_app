@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.Service.Service;
+import org.example.service.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,20 +20,21 @@ public class App {
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    service.showList("workers");
+                    service.showList("worker");
                     Thread.sleep(2000);
                     break;
                 case 3:
-                    service.showList("managers");
+                    service.showList("manager");
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    service.showList("others");
+                    service.showList("other");
                     Thread.sleep(2000);
                     break;
                 case 11:
                     System.out.println("Goodbye!");
                     loop = false;
+                    break;
             }
         } while (loop);
 
