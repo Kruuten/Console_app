@@ -1,14 +1,12 @@
-package org.example.Entity;
+package org.example.entity;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public class Manager{
+public class Worker {
     private String name;
     private String lastName;
     private LocalDate birthday;
     private LocalDate hireDate;
-    private List<Worker> managerWorkers;
 
     public String getName() {
         return name;
@@ -18,12 +16,12 @@ public class Manager{
         this.name = name;
     }
 
-    public String getLastName() {
+    public String getLastname() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastName = lastname;
     }
 
     public LocalDate getBirthday() {
@@ -34,38 +32,28 @@ public class Manager{
         this.birthday = birthday;
     }
 
-    public LocalDate getHireDate() {
+    public LocalDate getHire_date() {
         return hireDate;
     }
 
-    public void setHireDate(LocalDate hireDate) {
-        this.hireDate = hireDate;
+    public void setHire_date(LocalDate hire_date) {
+        this.hireDate = hire_date;
     }
 
-    public List<Worker> getManagerWorkers() {
-        return managerWorkers;
-    }
-
-    public void setManagerWorkers(List<Worker> managerWorkers) {
-        this.managerWorkers = managerWorkers;
-    }
-
-    public Manager(String name, String lastName, LocalDate birthday, LocalDate hireDate, List<Worker> managerWorkers) {
+    public Worker(String name, String lastName, LocalDate birthday, LocalDate hire_date) {
         this.name = name;
         this.lastName = lastName;
         this.birthday = birthday;
-        this.hireDate = hireDate;
-        this.managerWorkers = managerWorkers;
+        this.hireDate = hire_date;
     }
 
     @Override
     public String toString() {
-        return "Manager{" +
+        return "Worker{" +
                 "name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", hireDate=" + hireDate +
-                ", managerWorkers=" + managerWorkers +
                 '}';
     }
 }
