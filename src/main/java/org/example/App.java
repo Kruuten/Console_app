@@ -1,35 +1,45 @@
 package org.example;
 
+import org.example.entity.Menu;
+import org.example.entity.Worker;
 import org.example.service.Service;
+import org.w3c.dom.Document;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 
 public class App {
+    private static Document document;
     public static void main(String[] args) throws IOException, InterruptedException {
+        Menu menu = new Menu();
         Service service = new Service();
+        try {
+            document = Service.buildDocument();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Hi, what do you want to do?");
         boolean loop = true;
         do {
-            int number = showMenu();
+            int number = menu.mainMenu();
             switch (number) {
                 case 1:
-                    service.showList("company");
+                    service.showList(document, "company");
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    service.showList("worker");
+                    service.showList(document, "worker");
                     Thread.sleep(2000);
                     break;
                 case 3:
-                    service.showList("manager");
+                    service.showList(document,"manager");
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    service.showList("other");
+                    service.showList(document,"other");
                     Thread.sleep(2000);
+                    break;
+                case 5:
                     break;
                 case 11:
                     System.out.println("Goodbye!");
@@ -37,31 +47,6 @@ public class App {
                     break;
             }
         } while (loop);
-
-    }
-
-    public static int showMenu() throws IOException {
-        System.out.println("Available commands:");
-        System.out.println("1) Show all company");
-        System.out.println("2) Show workers");
-        System.out.println("3) Show managers");
-        System.out.println("4) Show others");
-        System.out.println("5) Create new employee");
-        System.out.println("6) Edit employee");
-        System.out.println("7) Edit managers workers");
-        System.out.println("8) Delete employee");
-        System.out.println("9) Sort by surname");
-        System.out.println("10) Sort by hire date");
-        System.out.println("11) exit");
-        System.out.println("Choose the number");
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int number = Integer.parseInt(reader.readLine());
-        while (number > 11 || number < 1) {
-            System.out.println("Wrong number chosen. Choose in 1-10");
-            number = Integer.parseInt(reader.readLine());
-        }
-        return number;
     }
 }
 
