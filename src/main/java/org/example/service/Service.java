@@ -14,19 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Service {
-    private Document document;
     private static final String FILE = "src/main/resources/Employees.xml";
     List<Worker> workers;
-    List<Worker> managers;
-    List<Worker> others;
 
 
-    public void showList(String category) {
-        try {
-            document = buildDocument();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void showList(Document document, String employeeRole) {
         Node rootNode = document.getFirstChild();
         NodeList rootChildren = rootNode.getChildNodes();
         Node employeeNode;
@@ -36,33 +28,15 @@ public class Service {
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-
-            switch (rootChildren.item(i).getNodeName()) {
-                case  "workers":
-                        workers = employeeList(employeeNode, category);
-                    break;
-                case "managers":
-                        managers = employeeList(employeeNode, category);
-                    break;
-                case "others":
-                        others = employeeList(employeeNode,category);
-                    break;
-            }
+            workers = employeeList(employeeNode, employeeRole);
+            System.out.println(workers);
         }
-            switch (category){
-                case "worker":
-                    System.out.println(workers);
-                    break;
-                case "manager":
-                    System.out.println(managers);
-                    break;
-                case "other":
-                    System.out.println(others);
-                    break;
-            }
     }
 
-    private List<Worker> employeeList(Node node, String category){
+    private List<Worker> employeeList(Node node, String employeeRole){
+        int id = 0;
+        int superior_id = 0;
+        String role = null;
         String name = null;
         String lastName = null;
         LocalDate birthday = null;
@@ -79,7 +53,7 @@ public class Service {
                 if (childList.item(i).getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                if (!childList.item(i).getNodeName().equals(category)) {
+                if (!childList.item(i).getNodeName().equals(employeeRole)) {
                     continue;
                 }
                 NodeList employeeElement = childList.item(i).getChildNodes();
@@ -89,51 +63,61 @@ public class Service {
                         continue;
                     }
 
+                    String content = employeeElement.item(j).getTextContent();
                     switch (employeeElement.item(j).getNodeName()) {
+                        case "id":
+                            id = Integer.parseInt(content);
+                            break;
+                        case "role":
+                            role =  content;
                         case "name":
-                            name = employeeElement.item(j).getTextContent();
+                            name = content;
                             break;
                         case "lastname":
-                            lastName = employeeElement.item(j).getTextContent();
+                            lastName = content;
                             break;
                         case "birthdate":
-                            birthday = parseDate(employeeElement.item(j).getTextContent());
+                            birthday = parseDate(content);
                             break;
                         case "hire_date":
-                            hireDate = parseDate(employeeElement.item(j).getTextContent());
+                            hireDate = parseDate(content);
                             break;
                         case "description":
-                            description = employeeElement.item(j).getTextContent();
+                            description = content;
                             break;
-                        case "workers":
-                            Node managerWorkers = employeeElement.item(j);
-                            subordinate = employeeList(managerWorkers, "worker");
+                        case "superior_id":
+                            superior_id = Integer.parseInt(content);
                             break;
                     }
                 }
-                switch (category) {
+                Worker worker;
+                switch (role) {
                     case "worker":
-                        Worker worker = new Worker(name, lastName, birthday, hireDate);
+                        worker = new Worker(id, role, name, lastName, birthday, hireDate, superior_id);
                         employeesList.add(worker);
                         break;
                     case "manager":
-                        Manager manager = new Manager(name, lastName, birthday, hireDate, subordinate);
-                        employeesList.add(manager);
+                        worker = new Manager(id,role, name, lastName, birthday, hireDate, superior_id);
+                        employeesList.add(worker);
                         break;
                     case "other":
-                        Other other = new Other(name, lastName, birthday, hireDate, description);
-                        employeesList.add(other);
+                        worker = new Other(id, role, name, lastName, birthday, hireDate, superior_id, description);
+                        employeesList.add(worker);
                         break;
                 }
             }
 
         return employeesList;
     }
-    private static Document buildDocument() throws Exception {
+
+    public void addNewEmployee(Worker worker){
+
+    }
+    public static Document buildDocument() throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         return documentBuilderFactory.newDocumentBuilder().parse(FILE);
     }
-    private LocalDate parseDate(String date){
+    public LocalDate parseDate(String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return LocalDate.parse(date, formatter);
     }
