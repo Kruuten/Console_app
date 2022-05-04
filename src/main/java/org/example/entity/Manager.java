@@ -4,27 +4,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Manager extends Worker{
-    private List<Worker> managerWorkers;
-    public List<Worker> getManagerWorkers() {
-        return managerWorkers;
-    }
 
-    public void setManagerWorkers(List<Worker> managerWorkers) {
-        this.managerWorkers = managerWorkers;
-    }
-
-    public Manager(String name, String lastName, LocalDate birthday, LocalDate hire_date, List<Worker> managerWorkers) {
-        super(name, lastName, birthday, hire_date);
-        this.managerWorkers = managerWorkers;
+    public Manager(int id, String role, String name, String lastName, LocalDate birthday, LocalDate hireDate, int superior_id) {
+        super(id, role, name, lastName, birthday, hireDate, superior_id);
     }
 
     @Override
     public String toString() {
-        return "Manager{" + "Name: '" + getName() + '\''
-                + ", Lastname: '" + getLastname() + '\''
+        return "Manager{" + "Id: '" + getId() + '\''
+                + ", Role: '" + getRole() + '\''
+                + ", Name: '" + getName() + '\''
+                + ", Lastname: '" + getLastName() + '\''
                 + ", Birthday: '" + getBirthday() + '\''
-                + ", Hire date: : '" + getHire_date() + '\''
-                + ", Manager workers'" + getManagerWorkers() + '\'' +
+                + ", Hire date: : '" + getHireDate() + '\''
+                +
                 '}';
     }
 }

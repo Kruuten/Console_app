@@ -12,18 +12,20 @@ public class Other extends Worker {
         this.description = description;
     }
 
-    public Other(String name, String lastName, LocalDate birthday, LocalDate hire_date, String description) {
-        super(name, lastName, birthday, hire_date);
+    public Other(int id, String role, String name, String lastName, LocalDate birthday, LocalDate hireDate, int superior_id, String description) {
+        super(id, role, name, lastName, birthday, hireDate, superior_id);
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Other{" + "Name: '" + getName() + '\''
-                + ", Lastname: '" + getLastname() + '\''
+        return "Other{" + "Id: '" + getId() + '\''
+                + "Role: '" + getRole() + '\''
+                + "Name: '" + getName() + '\''
+                + ", Lastname: '" + getLastName() + '\''
                 + ", Birthday: '" + getBirthday() + '\''
-                + ", Hire date: : '" + getHire_date() + '\''
-                + ", description: '" + description + '\'' +
+                + ", Hire date: : '" + getHireDate() + '\''
+                + ", description: '" + getDescription() + '\'' +
                 '}';
     }
 }
