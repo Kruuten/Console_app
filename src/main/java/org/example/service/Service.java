@@ -4,6 +4,7 @@ import org.example.entity.Manager;
 import org.example.entity.Other;
 import org.example.entity.Worker;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -14,126 +15,90 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Service {
-    private Document document;
     private static final String FILE = "src/main/resources/Employees.xml";
-    List<Worker> workers;
-    List<Worker> managers;
-    List<Worker> others;
+    Manager worker;
 
 
-    public void showList(String category) {
-        try {
-            document = buildDocument();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Node rootNode = document.getFirstChild();
-        NodeList rootChildren = rootNode.getChildNodes();
+
+    public void showList(Document document, String employeeRole) {
+        NodeList rootChildren = document.getElementsByTagName("employee");
         Node employeeNode;
-
+        List<Manager> workers = new ArrayList<>();
         for (int i = 0; i < rootChildren.getLength(); i++) {
             employeeNode = rootChildren.item(i);
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-
-            switch (rootChildren.item(i).getNodeName()) {
-                case  "workers":
-                        workers = employeeList(employeeNode, category);
-                    break;
-                case "managers":
-                        managers = employeeList(employeeNode, category);
-                    break;
-                case "others":
-                        others = employeeList(employeeNode,category);
-                    break;
-            }
+            worker = employeeList(employeeNode, employeeRole);
+            if (worker != null)
+                workers.add(worker);
         }
-            switch (category){
-                case "worker":
-                    System.out.println(workers);
-                    break;
-                case "manager":
-                    System.out.println(managers);
-                    break;
-                case "other":
-                    System.out.println(others);
-                    break;
-            }
+        for (Manager manager : workers){
+            System.out.println("Role: " + manager.getRole());
+            System.out.println("Id: " + manager.getId());
+            System.out.println("Name: " + manager.getName());
+            System.out.println("Last Name: " + manager.getLastName());
+            System.out.println("Birthday: " + manager.getBirthday());
+            System.out.println("Hire Date: " + manager.getHireDate());
+            if (manager instanceof Worker)
+                System.out.println("Managers id: " + ((Worker) manager).getSuperior_id());
+            if (manager instanceof Other)
+                System.out.println("Description: " + ((Other) manager).getDescription());
+            System.out.println();
+
+        }
     }
 
-    private List<Worker> employeeList(Node node, String category){
-        String name = null;
-        String lastName = null;
-        LocalDate birthday = null;
-        LocalDate hireDate = null;
+    private Manager employeeList(Node node, String employeeRole) {
+        int id;
+        int superior_id = 0;
+        String role;
+        String name;
+        String lastName;
+        LocalDate birthday;
+        LocalDate hireDate;
         String description = null;
-        List<Worker> subordinate = null;
-
         if (node == null) {
             return null;
         }
-        List<Worker> employeesList = new ArrayList<>();
-            NodeList childList = node.getChildNodes();
-            for (int i = 0; i < childList.getLength(); i++) {
-                if (childList.item(i).getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-                if (!childList.item(i).getNodeName().equals(category)) {
-                    continue;
-                }
-                NodeList employeeElement = childList.item(i).getChildNodes();
-                for (int j = 0; j < employeeElement.getLength(); j++) {
+        Manager search = null;
 
-                    if (employeeElement.item(j).getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-
-                    switch (employeeElement.item(j).getNodeName()) {
-                        case "name":
-                            name = employeeElement.item(j).getTextContent();
-                            break;
-                        case "lastname":
-                            lastName = employeeElement.item(j).getTextContent();
-                            break;
-                        case "birthdate":
-                            birthday = parseDate(employeeElement.item(j).getTextContent());
-                            break;
-                        case "hire_date":
-                            hireDate = parseDate(employeeElement.item(j).getTextContent());
-                            break;
-                        case "description":
-                            description = employeeElement.item(j).getTextContent();
-                            break;
-                        case "workers":
-                            Node managerWorkers = employeeElement.item(j);
-                            subordinate = employeeList(managerWorkers, "worker");
-                            break;
-                    }
-                }
-                switch (category) {
-                    case "worker":
-                        Worker worker = new Worker(name, lastName, birthday, hireDate);
-                        employeesList.add(worker);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
+            role = element.getElementsByTagName("role").item(0).getTextContent();
+            name = element.getElementsByTagName("name").item(0).getTextContent();
+            lastName = element.getElementsByTagName("lastname").item(0).getTextContent();
+            birthday = parseDate(element.getElementsByTagName("birthdate").item(0).getTextContent());
+            hireDate = parseDate(element.getElementsByTagName("hire_date").item(0).getTextContent());
+            if (element.getElementsByTagName("superior_id").item(0) != null) {
+                superior_id = Integer.parseInt(element.getElementsByTagName("superior_id").item(0).getTextContent());
+            }
+            if (element.getElementsByTagName("description").item(0) != null) {
+                description = element.getElementsByTagName("description").item(0).getTextContent();
+            }
+            if (role.equals(employeeRole)) {
+                switch (employeeRole) {
+                    case "Worker":
+                        search = new Worker(id, role, name, lastName, birthday, hireDate, superior_id);
                         break;
-                    case "manager":
-                        Manager manager = new Manager(name, lastName, birthday, hireDate, subordinate);
-                        employeesList.add(manager);
+                    case "Manager":
+                        search = new Manager(id, role, name, lastName, birthday, hireDate);
                         break;
-                    case "other":
-                        Other other = new Other(name, lastName, birthday, hireDate, description);
-                        employeesList.add(other);
+                    case "Other":
+                        search = new Other(id, role, name, lastName, birthday, hireDate, description);
                         break;
                 }
             }
-
-        return employeesList;
+        }
+        return search;
     }
-    private static Document buildDocument() throws Exception {
+
+    public static Document buildDocument() throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         return documentBuilderFactory.newDocumentBuilder().parse(FILE);
     }
-    private LocalDate parseDate(String date){
+    public LocalDate parseDate(String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return LocalDate.parse(date, formatter);
     }

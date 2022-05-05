@@ -2,8 +2,9 @@ package org.example.entity;
 
 import java.time.LocalDate;
 
-public class Other extends Worker {
- private String description;
+public class Other extends Manager {
+    private String description;
+
     public String getDescription() {
         return description;
     }
@@ -12,18 +13,21 @@ public class Other extends Worker {
         this.description = description;
     }
 
-    public Other(String name, String lastName, LocalDate birthday, LocalDate hire_date, String description) {
-        super(name, lastName, birthday, hire_date);
+    public Other(int id, String role, String name, String lastName, LocalDate birthday, LocalDate hireDate, String description) {
+        super(id, role, name, lastName, birthday, hireDate);
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Other{" + "Name: '" + getName() + '\''
-                + ", Lastname: '" + getLastname() + '\''
-                + ", Birthday: '" + getBirthday() + '\''
-                + ", Hire date: : '" + getHire_date() + '\''
-                + ", description: '" + description + '\'' +
+        return "Other{" +
+                "id=" + getId() +
+                ", role='" + getRole() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", birthday=" + getBirthday() +
+                ", hireDate=" + getHireDate() +
+                ", description='" + description + '\'' +
                 '}';
     }
 }
