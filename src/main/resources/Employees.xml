@@ -7,27 +7,32 @@
         <lastname>Petrov</lastname>
         <birthdate>01.01.1992</birthdate>
         <hire_date>01.01.2021</hire_date>
-        <superior_id></superior_id>
-        <description></description>
     </employee>
     <employee>
         <id>2</id>
-        <name>Petr</name>
         <role>Worker</role>
+        <name>Petr</name>
         <lastname>Ivanov</lastname>
         <birthdate>01.01.1982</birthdate>
         <hire_date>01.01.2022</hire_date>
         <superior_id>1</superior_id>
-        <description></description>
     </employee>
     <employee>
         <id>3</id>
+        <role>Worker</role>
+        <name>Nikita</name>
+        <lastname>Sidorov</lastname>
+        <birthdate>01.01.1984</birthdate>
+        <hire_date>01.01.2020</hire_date>
+        <superior_id>1</superior_id>
+    </employee>
+    <employee>
+        <id>4</id>
         <role>Other</role>
         <name>Steven</name>
         <lastname>Spielberg</lastname>
         <birthdate>01.01.1961</birthdate>
         <hire_date>01.01.2004</hire_date>
-        <superior_id></superior_id>
         <description>Director</description>
     </employee>
 </company>

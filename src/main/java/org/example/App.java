@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.entity.Menu;
-import org.example.entity.Worker;
 import org.example.service.Service;
 import org.w3c.dom.Document;
 
@@ -24,19 +23,19 @@ public class App {
             int number = menu.mainMenu();
             switch (number) {
                 case 1:
-                    service.showList(document, "company");
+                    service.showList(document, "All");
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    service.showList(document, "worker");
+                    service.showList(document, "Worker");
                     Thread.sleep(2000);
                     break;
                 case 3:
-                    service.showList(document,"manager");
+                    service.showList(document,"Manager");
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    service.showList(document,"other");
+                    service.showList(document,"Other");
                     Thread.sleep(2000);
                     break;
                 case 5:

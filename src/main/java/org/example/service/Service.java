@@ -4,6 +4,7 @@ import org.example.entity.Manager;
 import org.example.entity.Other;
 import org.example.entity.Worker;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -15,104 +16,71 @@ import java.util.List;
 
 public class Service {
     private static final String FILE = "src/main/resources/Employees.xml";
-    List<Worker> workers;
+    Manager worker;
+
 
 
     public void showList(Document document, String employeeRole) {
-        Node rootNode = document.getFirstChild();
-        NodeList rootChildren = rootNode.getChildNodes();
+        NodeList rootChildren = document.getElementsByTagName("employee");
         Node employeeNode;
-
+        List<Manager> workers = new ArrayList<>();
         for (int i = 0; i < rootChildren.getLength(); i++) {
             employeeNode = rootChildren.item(i);
             if (rootChildren.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-            workers = employeeList(employeeNode, employeeRole);
-            System.out.println(workers);
+            worker = employeeList(employeeNode, employeeRole);
+            if (worker != null)
+                workers.add(worker);
         }
+        System.out.println(workers);
     }
 
-    private List<Worker> employeeList(Node node, String employeeRole){
-        int id = 0;
+    private Manager employeeList(Node node, String employeeRole) {
+        int id;
         int superior_id = 0;
-        String role = null;
-        String name = null;
-        String lastName = null;
-        LocalDate birthday = null;
-        LocalDate hireDate = null;
+        String role;
+        String name;
+        String lastName;
+        LocalDate birthday;
+        LocalDate hireDate;
         String description = null;
-        List<Worker> subordinate = null;
-
         if (node == null) {
             return null;
         }
-        List<Worker> employeesList = new ArrayList<>();
-            NodeList childList = node.getChildNodes();
-            for (int i = 0; i < childList.getLength(); i++) {
-                if (childList.item(i).getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-                if (!childList.item(i).getNodeName().equals(employeeRole)) {
-                    continue;
-                }
-                NodeList employeeElement = childList.item(i).getChildNodes();
-                for (int j = 0; j < employeeElement.getLength(); j++) {
+        Manager search = null;
 
-                    if (employeeElement.item(j).getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-
-                    String content = employeeElement.item(j).getTextContent();
-                    switch (employeeElement.item(j).getNodeName()) {
-                        case "id":
-                            id = Integer.parseInt(content);
-                            break;
-                        case "role":
-                            role =  content;
-                        case "name":
-                            name = content;
-                            break;
-                        case "lastname":
-                            lastName = content;
-                            break;
-                        case "birthdate":
-                            birthday = parseDate(content);
-                            break;
-                        case "hire_date":
-                            hireDate = parseDate(content);
-                            break;
-                        case "description":
-                            description = content;
-                            break;
-                        case "superior_id":
-                            superior_id = Integer.parseInt(content);
-                            break;
-                    }
-                }
-                Worker worker;
-                switch (role) {
-                    case "worker":
-                        worker = new Worker(id, role, name, lastName, birthday, hireDate, superior_id);
-                        employeesList.add(worker);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
+            role = element.getElementsByTagName("role").item(0).getTextContent();
+            name = element.getElementsByTagName("name").item(0).getTextContent();
+            lastName = element.getElementsByTagName("lastname").item(0).getTextContent();
+            birthday = parseDate(element.getElementsByTagName("birthdate").item(0).getTextContent());
+            hireDate = parseDate(element.getElementsByTagName("hire_date").item(0).getTextContent());
+            if (element.getElementsByTagName("superior_id").item(0) != null) {
+                superior_id = Integer.parseInt(element.getElementsByTagName("superior_id").item(0).getTextContent());
+            }
+            if (element.getElementsByTagName("description").item(0) != null) {
+                description = element.getElementsByTagName("description").item(0).getTextContent();
+            }
+            if (role.equals(employeeRole)) {
+                switch (employeeRole) {
+                    case "Worker":
+                        search = new Worker(id, role, name, lastName, birthday, hireDate, superior_id);
                         break;
-                    case "manager":
-                        worker = new Manager(id,role, name, lastName, birthday, hireDate, superior_id);
-                        employeesList.add(worker);
+                    case "Manager":
+                        search = new Manager(id, role, name, lastName, birthday, hireDate);
                         break;
-                    case "other":
-                        worker = new Other(id, role, name, lastName, birthday, hireDate, superior_id, description);
-                        employeesList.add(worker);
+                    case "Other":
+                        search = new Other(id, role, name, lastName, birthday, hireDate, description);
                         break;
                 }
             }
-
-        return employeesList;
+        }
+        return search;
     }
 
-    public void addNewEmployee(Worker worker){
-
-    }
     public static Document buildDocument() throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         return documentBuilderFactory.newDocumentBuilder().parse(FILE);
