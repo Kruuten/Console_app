@@ -33,20 +33,20 @@ public class Service {
             if (worker != null)
                 workers.add(worker);
         }
-        for (Manager manager : workers){
-            System.out.println("Role: " + manager.getRole());
-            System.out.println("Id: " + manager.getId());
-            System.out.println("Name: " + manager.getName());
-            System.out.println("Last Name: " + manager.getLastName());
-            System.out.println("Birthday: " + manager.getBirthday());
-            System.out.println("Hire Date: " + manager.getHireDate());
-            if (manager instanceof Worker)
-                System.out.println("Managers id: " + ((Worker) manager).getSuperior_id());
-            if (manager instanceof Other)
-                System.out.println("Description: " + ((Other) manager).getDescription());
-            System.out.println();
-
-        }
+//        for (Manager manager : workers){
+//            System.out.println("Role: " + manager.getRole());
+//            System.out.println("Id: " + manager.getId());
+//            System.out.println("Name: " + manager.getName());
+//            System.out.println("Last Name: " + manager.getLastName());
+//            System.out.println("Birthday: " + manager.getBirthday());
+//            System.out.println("Hire Date: " + manager.getHireDate());
+//            if (manager instanceof Worker)
+//                System.out.println("Managers id: " + ((Worker) manager).getSuperior_id());
+//            if (manager instanceof Other)
+//                System.out.println("Description: " + ((Other) manager).getDescription());
+//            System.out.println();
+//
+//        }
     }
 
     private Manager employeeList(Node node, String employeeRole) {
