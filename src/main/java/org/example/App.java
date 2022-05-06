@@ -1,14 +1,18 @@
 package org.example;
 
+import org.example.entity.Manager;
 import org.example.entity.Menu;
 import org.example.service.Service;
 import org.w3c.dom.Document;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class App {
     private static Document document;
+    static String employeeRole = null;
+    static List<Manager> employees;
     public static void main(String[] args) throws IOException, InterruptedException {
         Menu menu = new Menu();
         Service service = new Service();
@@ -23,23 +27,37 @@ public class App {
             int number = menu.mainMenu();
             switch (number) {
                 case 1:
-                    service.showList(document, "All");
+                    employees = service.employeeList(document, "all");
+                    menu.showEmployees(employees);
                     Thread.sleep(2000);
                     break;
                 case 2:
-                    service.showList(document, "Worker");
+                    employees = service.employeeList(document, "Worker");
+                    menu.showEmployees(employees);
                     Thread.sleep(2000);
                     break;
                 case 3:
-                    service.showList(document,"Manager");
+                    employees = service.employeeList(document,"Manager");
+                    menu.showEmployees(employees);
                     Thread.sleep(2000);
                     break;
                 case 4:
-                    service.showList(document,"Other");
+                    employees = service.employeeList(document, "Other");
+                    menu.showEmployees(employees);
                     Thread.sleep(2000);
                     break;
                 case 5:
+                    employeeRole = menu.choseEmployeeRoleMenu();
+                    Manager manager = menu.createEmployeeData(employeeRole);
+                    service.createEmployee(manager, document);
                     break;
+                case 6:
+                    employeeRole = menu.choseEmployeeRoleMenu();
+                    employees = service.employeeList(document, employeeRole);
+                    menu.showEmployees(employees);
+                    menu.pickEmployee(employees);
+
+
                 case 11:
                     System.out.println("Goodbye!");
                     loop = false;
