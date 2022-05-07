@@ -1,6 +1,9 @@
-package org.example.entity;
+package org.example.service;
 
 import org.example.App;
+import org.example.entity.Manager;
+import org.example.entity.Other;
+import org.example.entity.Worker;
 import org.example.service.Service;
 
 import java.io.BufferedReader;
@@ -128,6 +131,19 @@ public class Menu {
                 pickManager = manager;
         }
         return pickManager;
+    }
+
+    public Manager editEmployeeData(Manager employee) {
+        System.out.println("What do you want to edit?");
+        System.out.println("1) Name");
+        System.out.println("2) Last name");
+        System.out.println("3) Birthday");
+        System.out.println("4) Hire date");
+        if (employee instanceof Worker)
+            System.out.println("5) Superior manager");
+        if (employee instanceof Other)
+            System.out.println("6) Description");
+
     }
 
 }
