@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.entity.Manager;
-import org.example.entity.Menu;
+import org.example.service.Menu;
 import org.example.service.Service;
 import org.w3c.dom.Document;
 
@@ -13,6 +13,7 @@ public class App {
     private static Document document;
     static String employeeRole = null;
     static List<Manager> employees;
+    static Manager employee;
     public static void main(String[] args) throws IOException, InterruptedException {
         Menu menu = new Menu();
         Service service = new Service();
@@ -55,7 +56,7 @@ public class App {
                     employeeRole = menu.choseEmployeeRoleMenu();
                     employees = service.employeeList(document, employeeRole);
                     menu.showEmployees(employees);
-                    menu.pickEmployee(employees);
+                    employee = menu.pickEmployee(employees);
 
 
                 case 11:
