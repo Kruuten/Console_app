@@ -1,6 +1,9 @@
-package org.example.entity;
+package org.example.service;
 
 import org.example.App;
+import org.example.entity.Manager;
+import org.example.entity.Other;
+import org.example.entity.Worker;
 import org.example.service.Service;
 
 import java.io.BufferedReader;
@@ -128,6 +131,76 @@ public class Menu {
                 pickManager = manager;
         }
         return pickManager;
+    }
+
+    public Manager editEmployeeData(Manager employee) throws IOException {
+        boolean loop = true;
+        do {
+            System.out.println("What do you want to edit?");
+            System.out.println("1) Name");
+            System.out.println("2) Last name");
+            System.out.println("3) Birthday");
+            System.out.println("4) Hire date");
+            if (employee instanceof Worker)
+                System.out.println("5) Superior manager");
+            if (employee instanceof Other)
+                System.out.println("6) Description");
+            System.out.println("7) Exit");
+
+            int number = Integer.parseInt(reader.readLine());
+            while (number > 7 || number < 1) {
+                System.out.println("Wrong number chosen. Choose in 1-7");
+                number = Integer.parseInt(reader.readLine());
+            }
+
+            switch (number) {
+                case 1:
+                    System.out.print("Write new name: ");
+                    String name = reader.readLine();
+                    employee.setName(name);
+                    System.out.println("Name changed");
+                    break;
+                case 2:
+                    System.out.print("Write new last name: ");
+                    String lastname = reader.readLine();
+                    employee.setLastName(lastname);
+                    System.out.println("Lastname changed");
+                    break;
+                case 3:
+                    System.out.print("Write new birthdate like dd.MM.yyyy: ");
+                    LocalDate birthdate = service.parseDate(reader.readLine());
+                    employee.setBirthday(birthdate);
+                    System.out.println("Birthday changed");
+                    break;
+                case 4:
+                    System.out.print("Write new hire date like dd.MM.yyyy: ");
+                    LocalDate hireDate = service.parseDate(reader.readLine());
+                    employee.setHireDate(hireDate);
+                    System.out.println("Hire date changed");
+                    break;
+                case 5:
+                    if (employee instanceof Worker) {
+                        System.out.print("Write new manager id: ");
+                        int id = Integer.parseInt(reader.readLine());
+                        ((Worker) employee).setSuperior_id(id);
+                        System.out.println("Hire date changed");
+                    } else System.out.println("This employee is not a Worker, so u can't change Manager's ID");
+                    break;
+                case 6:
+                    if (employee instanceof Other) {
+                        System.out.print("Write new description: ");
+                        String description = reader.readLine();
+                        ((Other) employee).setDescription(description);
+                        System.out.println("Hire date changed");
+                    } else System.out.println("You cant add a description to this employee");
+                    break;
+                case 7 :
+                    System.out.println("Going back to main menu");
+                    loop = false;
+                    break;
+            }
+        } while (loop);
+        return employee;
     }
 
 }
