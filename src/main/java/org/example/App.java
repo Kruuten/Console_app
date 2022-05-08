@@ -57,6 +57,7 @@ public class App {
                     employees = service.employeeList(document, employeeRole);
                     menu.showEmployees(employees);
                     employee = menu.pickEmployee(employees);
+                    Manager editedEmployee = menu.editEmployeeData(employee);
 
 
                 case 11:
